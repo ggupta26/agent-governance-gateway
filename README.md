@@ -4,7 +4,7 @@
 
 The LLM decides *what* it wants to do. The gateway decides whether it *may*, asks a human when the stakes are high, and keeps a tamper-evident record of everything that happened.
 
-[![tests](https://github.com/YOUR-USERNAME/agent-governance-gateway/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR-USERNAME/agent-governance-gateway/actions/workflows/ci.yml)
+[![tests](https://github.com/ggupta26/agent-governance-gateway/actions/workflows/ci.yml/badge.svg)](https://github.com/ggupta26/agent-governance-gateway/actions/workflows/ci.yml)
 ![python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![license](https://img.shields.io/badge/license-MIT-green)
 
@@ -49,7 +49,7 @@ flowchart LR
 No API keys or cloud account needed. Python 3.10+.
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/agent-governance-gateway.git
+git clone https://github.com/ggupta26/agent-governance-gateway.git
 cd agent-governance-gateway
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
