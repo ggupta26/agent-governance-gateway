@@ -1,0 +1,15 @@
+[project]
+name = "agent-governance-gateway"
+version = "0.1.0"
+description = "Policy-enforcing, audited gateway between AI agents and the tools they call"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Gaurav Gupta" }]
+dependencies = ["pyyaml>=6.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

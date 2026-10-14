@@ -1,0 +1,59 @@
+# Agent tool-call policy for the customer-support agent.
+#
+# Reviewed like code: every change goes through a pull request so risk,
+# privacy and engineering can see exactly what the agent may do.
+#
+# Decisions: allow | require_approval | deny
+# When several rules match, the strictest decision wins.
+# Any tool not listed here falls back to `default`.
+
+version: "2026.10.1"
+owner: "platform-ai-governance"
+default: deny
+
+tools:
+  lookup_customer:
+    decision: allow
+    reason: "Read-only lookup needed to answer support questions"
+    data_classification: confidential
+    redact_output: true          # personal info never lands in the audit log
+    rate_limit: 20               # per session; limits bulk scraping by a misbehaving agent
+
+  send_email:
+    decision: allow
+    reason: "Agent may email customers about their own account"
+    data_classification: internal
+    rules:
+      - id: email.external_domain
+        when: { param: to, not_endswith: "@example.com" }
+        decision: require_approval
+        reason: "Recipient outside the customer domain needs human review"
+
+  issue_refund:
+    decision: allow
+    reason: "Small goodwill refunds can be issued autonomously"
+    data_classification: confidential
+    rate_limit: 3
+    rules:
+      - id: refund.over_100
+        when: { param: amount, gt: 100 }
+        decision: require_approval
+        reason: "Refunds over $100 need human sign-off"
+      - id: refund.over_1000
+        when: { param: amount, gt: 1000 }
+        decision: deny
+        reason: "Refunds over $1,000 are outside the agent's mandate"
+
+  delete_customer:
+    decision: deny
+    reason: "Deletion is irreversible and subject to retention rules; humans only"
+
+  export_customers:
+    decision: require_approval
+    reason: "Bulk export of personal information"
+    data_classification: restricted
+    rules:
+      - id: export.external_destination
+        when: { param: destination, not_endswith: ".internal" }
+        decision: deny
+        reason: "Personal information may not leave internal systems"
